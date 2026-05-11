@@ -1,0 +1,61 @@
+@startuml
+title Sistema de Gestió de Qüestionaris - Diagrama UML de Classes
+
+' =====================================================
+' CLASE USUARIOS
+' =====================================================
+class Usuarios {
+    - id_usuario : int
+    - nom : String
+    - nom_usuario : String
+    - contrassenya : String
+    - email : String
+    - data_registre : Date
+    - num_partides : int
+    - victories : int
+    - derrotes : int
+    - empats : int
+    - puntuacio_total : decimal
+}
+
+' =====================================================
+' CLASE QUESTIONARIS
+' =====================================================
+class Questionaris {
+    - id_questionari : int
+    - id_propietari : int
+    - titol : String
+    - categoria : String
+    - dificultat : int
+    - descripcio : String
+}
+
+' =====================================================
+' CLASE PREGUNTES
+' =====================================================
+class Preguntes {
+    - id_pregunta : int
+    - id_questionari : int
+    - tipus : String
+    - enunciat : String
+    - resposta1 : String
+    - resposta2 : String
+    - resposta3 : String
+    - resposta4 : String
+    - resposta_correcta : int
+    - punts : int
+}
+
+' =====================================================
+' RELACIONES
+' =====================================================
+
+' Un usuario puede crear muchos cuestionarios
+' Cada cuestionario pertenece a un único usuario
+Usuarios "1" -- "0..*" Questionaris : crea >
+
+' Un cuestionario contiene muchas preguntas
+' Cada pregunta pertenece a un único cuestionario
+Questionaris "1" -- "1..*" Preguntes : conté >
+
+@enduml
