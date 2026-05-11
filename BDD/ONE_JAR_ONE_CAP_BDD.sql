@@ -1,10 +1,10 @@
-CREATE DATABASE IF NOT EXISTS sistema_cuestionarios;
-USE sistema_cuestionarios;
+CREATE DATABASE IF NOT EXISTS sistema_cuestionaris;
+USE sistema_cuestionaris;
 
-CREATE TABLE usuarios (
-    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE usuaris (
+    id_usuari INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
-    nom_usuario VARCHAR(50) NOT NULL UNIQUE,
+    nom_usuari VARCHAR(50) NOT NULL UNIQUE,
     contrassenya VARCHAR(255) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     data_registre DATE NOT NULL DEFAULT (CURRENT_DATE),
@@ -15,8 +15,6 @@ CREATE TABLE usuarios (
     puntuacio_total DECIMAL(10,2) NOT NULL DEFAULT 0.00
 );
 
--- TABLA: questionaris
-
 CREATE TABLE questionaris (
     id_questionari INT AUTO_INCREMENT PRIMARY KEY,
     id_propietari INT NOT NULL,
@@ -25,19 +23,15 @@ CREATE TABLE questionaris (
     dificultat INT NOT NULL,
     descripcio TEXT,
 
-    -- Restricción de dificultad entre 1 y 5
     CONSTRAINT chk_dificultat
         CHECK (dificultat BETWEEN 1 AND 5),
 
-    -- Clave foránea al propietario del cuestionario
     CONSTRAINT fk_questionari_usuari
         FOREIGN KEY (id_propietari)
-        REFERENCES usuarios(id_usuario)
+        REFERENCES usuaris(id_usuari)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
-
--- TABLA: preguntes
 
 CREATE TABLE preguntes (
     id_pregunta INT AUTO_INCREMENT PRIMARY KEY,
@@ -53,15 +47,12 @@ CREATE TABLE preguntes (
     resposta_correcta INT NOT NULL,
     punts INT NOT NULL DEFAULT 1,
 
-    -- La respuesta correcta debe estar entre 1 y 4
     CONSTRAINT chk_resposta_correcta
         CHECK (resposta_correcta BETWEEN 1 AND 4),
 
-    -- Puntuación positiva (normalmente 1 o 2)
     CONSTRAINT chk_punts
         CHECK (punts > 0),
 
-    -- Clave foránea al cuestionario
     CONSTRAINT fk_pregunta_questionari
         FOREIGN KEY (id_questionari)
         REFERENCES questionaris(id_questionari)
@@ -69,9 +60,39 @@ CREATE TABLE preguntes (
         ON UPDATE CASCADE
 );
 
--- =====================================================
--- ÍNDICES RECOMENDADOS
--- =====================================================
+CREATE TABLE partides (
+    id_partida INT AUTO_INCREMENT PRIMARY KEY,
+    id_questionari INT NOT NULL,
+    tipus ENUM('INDIVIDUAL', 'VS') NOT NULL,
+    data_partida DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_partida_questionari
+        FOREIGN KEY (id_questionari)
+        REFERENCES questionaris(id_questionari)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE resultats (
+    id_resultat INT AUTO_INCREMENT PRIMARY KEY,
+    id_partida INT NOT NULL,
+    id_usuari INT NOT NULL,
+    puntuacio DECIMAL(5,2) NOT NULL,
+    resultat ENUM('WIN', 'LOSE', 'DRAW') NOT NULL,
+
+    CONSTRAINT fk_resultat_partida
+        FOREIGN KEY (id_partida)
+        REFERENCES partides(id_partida)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_resultat_usuari
+        FOREIGN KEY (id_usuari)
+        REFERENCES usuaris(id_usuari)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
 CREATE INDEX idx_questionaris_categoria
     ON questionaris(categoria);
 
@@ -80,3 +101,9 @@ CREATE INDEX idx_questionaris_dificultat
 
 CREATE INDEX idx_preguntes_tipus
     ON preguntes(tipus);
+
+CREATE INDEX idx_resultats_puntuacio
+    ON resultats(puntuacio);
+
+CREATE INDEX idx_usuaris_victories
+    ON usuaris(victories);
