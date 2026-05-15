@@ -1,4 +1,3 @@
-
 def main():
     opcio = input("Introdueix una opció (1, 2 o 3): ")
     match opcio:
