@@ -1,6 +1,9 @@
+<<<<<<< HEAD
+=======
 from models import User
 
 
+>>>>>>> 1919e5a6bd1215582c91b1cd7e0496e2812fc8a1
 def main():
     print("-------------------------")
     print("  Introdueix una opció   ")
