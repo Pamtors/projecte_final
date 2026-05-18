@@ -1,5 +1,6 @@
 from models.usuari import Usuari
 from datetime import date
+from models.questionari import carregar_questionaris_json
 
 def crear_usuari(id_usuari):
     nom = input("Introdueix el teu nom: ")
@@ -22,11 +23,10 @@ def crear_usuari(id_usuari):
 def main():
     proxim_id = 1
     usuaris_registrats = [] 
+    questionaris_disponibles = carregar_questionaris_json("questionaris.json")
 
     while True:
-        print("\n-------------------------")
         print("  Introdueix una opció   ")
-        print("-------------------------")
         print("1. Registre Usuari")
         print("2. Iniciar Sessió")
         print("3. Sortir")
