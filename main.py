@@ -6,7 +6,9 @@ def crear_usuari(id_usuari):
     nom_usuari = input("Introdueix el teu nom d'usuari: ")
 
     while True:
-        contrassenya = input("Introdueix la contrasenya (mínim 8 caràcters): ")
+        contrassenya = input(
+            "Introdueix la contrasenya (mínim 8 caràcters): "
+        )
         
         if len(contrassenya) >= 8:
             break
@@ -22,7 +24,9 @@ def main():
     usuaris_registrats = [] 
 
     while True:
+        print("\n-------------------------")
         print("  Introdueix una opció   ")
+        print("-------------------------")
         print("1. Registre Usuari")
         print("2. Iniciar Sessió")
         print("3. Sortir")
