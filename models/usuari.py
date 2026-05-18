@@ -15,23 +15,6 @@ class Usuari:
         self.empats = 0
         self.puntuacio_total = 0.0
 
-    def crear_usuari(self):
-        self.nom = input("Introdueix el teu nom: ")
-        self.nom_usuari = input("Introdueix el teu nom d'usuari: ")
-
-        while True:
-            self.contrassenya = input(
-                "Introdueix la contrasenya (mínim 8 caràcters): "
-            )
-            
-            if len(self.contrassenya) >= 8:
-                break
-            print("La contrasenya ha de tenir com a mínim 8 caràcters.")
-
-        self.email = input("Introdueix el teu email: ")
-        self.data_registre = date.today()
-        usuari = Usuari(id, )
-        insertar_usuari(usuari)
     def afegir_victoria(self):
         self.num_partides += 1
         self.victories += 1
