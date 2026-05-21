@@ -2,6 +2,7 @@ from models.usuari import Usuari
 from datetime import date
 from models.questionari import carregar_questionaris_json
 from services.importacio_json import ImportadorJSON
+import sqlite3
 
 def crear_usuari(id_usuari):
 
@@ -10,35 +11,19 @@ def crear_usuari(id_usuari):
 
     while True:
 
-        contrassenya = input(
-            "Introdueix la contrassenya (mínim 8 caràcters): "
-        )
-
+        contrassenya = input("Introdueix la contrassenya (mínim 8 caràcters): ")
         if len(contrassenya) >= 8:
             break
-
-        print(
-            "La contrassenya ha de tenir com a mínim 8 caràcters."
-        )
+        print("La contrassenya ha de tenir com a mínim 8 caràcters.")
 
     email = input("Introdueix el teu email: ")
 
-    usuari = Usuari(
-        id_usuari,
-        nom,
-        nom_usuari,
-        contrassenya,
-        email
-    )
+    usuari = Usuari(id_usuari, nom, nom_usuari, contrassenya, email)
 
     return usuari
 
 
 def main():
-
-    import sqlite3
-
-    # CONNEXIÓ BASE DE DADES
     connexio = sqlite3.connect("quizzbattle.db")
 
     proxim_id = 1
@@ -46,9 +31,7 @@ def main():
     usuaris_registrats = []
 
     # CARREGAR QUESTIONARIS
-    questionaris_disponibles = carregar_questionaris_json(
-        "data/questionaris_prova.json"
-    )
+    questionaris_disponibles = carregar_questionaris_json("data/questionaris_prova.json")
 
     while True:
 
@@ -87,11 +70,7 @@ def main():
 
                 for usuari in usuaris_registrats:
 
-                    if (
-                        usuari.nom_usuari == nom_login
-                        and usuari.contrassenya == pass_login
-                    ):
-
+                    if (usuari.nom_usuari == nom_login and usuari.contrassenya == pass_login):
                         usuari_actual = usuari
                         break
 
@@ -101,71 +80,42 @@ def main():
 
                 print(f"\nBenvingut {usuari_actual.nom}")
 
-                # SUBMENU
                 while True:
-
                     print("\n--- MENÚ USUARI ---")
                     print("a. Importar qüestionari")
                     print("b. Veure questionaris")
                     print("c. Tancar sessió")
-
+                    
                     opcio2 = input("Opció: ")
-
                     match opcio2:
-
+                        
                         case "a":
-
-                            ruta = input(
-                                "Nom del fitxer JSON: "
-                            )
-
+                            ruta = input("Nom del fitxer JSON: ")
                             importador = ImportadorJSON(connexio)
-
-                            importador.importar_questionaris(
-                                ruta,
-                                usuari_actual.id_usuari
-                            )
+                            importador.importar_questionaris(ruta, usuari_actual.id_usuari)
 
                         case "b":
-
                             print("\n--- QUESTIONARIS ---")
 
                             for q in questionaris_disponibles:
-
-                                print(
-                                    f"\nTítol: {q.titol}"
-                                )
-
-                                print(
-                                    f"Categoria: {q.categoria}"
-                                )
-
-                                print(
-                                    f"Dificultat: {q.dificultat}"
-                                )
-
-                                print(
-                                    f"Preguntes: {len(q.preguntes)}"
-                                )
+                                print(f"\nTítol: {q.titol}")
+                                print(f"Categoria: {q.categoria}")
+                                print(f"Dificultat: {q.dificultat}")
+                                print(f"Preguntes: {len(q.preguntes)}")
 
                         case "c":
-
                             print("Tancant sessió...")
                             break
 
                         case _:
-
                             print("Opció no vàlida")
 
             case "3":
-
                 print("Sortint de l'aplicació...")
                 break
 
             case _:
-
                 print("Opció no vàlida")
-
 
 if __name__ == "__main__":
     main()
