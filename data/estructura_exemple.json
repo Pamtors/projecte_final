@@ -1,0 +1,96 @@
+{
+  "questionaris": [
+    {
+      "informacio": {
+        "titol": "questionari_exemple_1",
+        "categoria": "categoria_exemple_1",
+        "dificultat": 2,
+        "descripcio": "descripcio_exemple_1"
+      },
+      "preguntes": [
+        {
+          "tipus": "multiple",
+          "enunciat": "pregunta_exemple_1",
+          "respostes": {
+            "resposta1": "resposta_exemple_1",
+            "resposta2": "resposta_exemple_2",
+            "resposta3": "resposta_exemple_3",
+            "resposta4": "resposta_exemple_4"
+          },
+          "resposta_correcta": 2,
+          "punts": 1
+        },
+        {
+          "tipus": "vf",
+          "enunciat": "pregunta_exemple_2",
+          "respostes": {
+            "resposta1": "Verdader",
+            "resposta2": "Fals",
+            "resposta3": null,
+            "resposta4": null
+          },
+          "resposta_correcta": 1,
+          "punts": 2
+        },
+        {
+          "tipus": "multiple",
+          "enunciat": "pregunta_exemple_3",
+          "respostes": {
+            "resposta1": "resposta_exemple_1",
+            "resposta2": "resposta_exemple_2",
+            "resposta3": "resposta_exemple_3",
+            "resposta4": "resposta_exemple_4"
+          },
+          "resposta_correcta": 4,
+          "punts": 3
+        }
+      ]
+    },
+    {
+      "informacio": {
+        "titol": "questionari_exemple_2",
+        "categoria": "categoria_exemple_2",
+        "dificultat": 4,
+        "descripcio": "descripcio_exemple_2"
+      },
+      "preguntes": [
+        {
+          "tipus": "vf",
+          "enunciat": "pregunta_exemple_4",
+          "respostes": {
+            "resposta1": "Verdader",
+            "resposta2": "Fals",
+            "resposta3": null,
+            "resposta4": null
+          },
+          "resposta_correcta": 2,
+          "punts": 1
+        },
+        {
+          "tipus": "multiple",
+          "enunciat": "pregunta_exemple_5",
+          "respostes": {
+            "resposta1": "resposta_exemple_1",
+            "resposta2": "resposta_exemple_2",
+            "resposta3": "resposta_exemple_3",
+            "resposta4": "resposta_exemple_4"
+          },
+          "resposta_correcta": 3,
+          "punts": 2
+        },
+        {
+          "tipus": "multiple",
+          "enunciat": "pregunta_exemple_6",
+          "respostes": {
+            "resposta1": "resposta_exemple_1",
+            "resposta2": "resposta_exemple_2",
+            "resposta3": "resposta_exemple_3",
+            "resposta4": "resposta_exemple_4"
+          },
+          "resposta_correcta": 1,
+          "punts": 4
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "questionaris": [
+    {
+      "informacio": {
+        "titol": "Gamer Level 99",
+        "categoria": "Gaming i Memes",
+        "dificultat": 2,
+        "descripcio": "Demostra si ets un autèntic gamer o només jugues al Solitari."
+      },
+      "preguntes": [
+        {
+          "tipus": "multiple",
+          "enunciat": "Què significa AFK?",
+          "respostes": {
+            "resposta1": "Away From Keyboard",
+            "resposta2": "A Fregar Kills",
+            "resposta3": "Anar a Fer el Kebab",
+            "resposta4": "Attack Full Kombat"
+          },
+          "resposta_correcta": 1,
+          "punts": 2
+        },
+        {
+          "tipus": "vf",
+          "enunciat": "Dir 'és l'última rankeds' a les 2 de la matinada sol ser mentida.",
+          "respostes": {
+            "resposta1": "Verdader",
+            "resposta2": "Fals",
+            "resposta3": null,
+            "resposta4": null
+          },
+          "resposta_correcta": 1,
+          "punts": 1
+        },
+        {
+          "tipus": "multiple",
+          "enunciat": "Quin joc és famós per fer-te dir 'una partida més i vaig a dormir'?",
+          "respostes": {
+            "resposta1": "League of Legends",
+            "resposta2": "Tetris",
+            "resposta3": "Buscaminas",
+            "resposta4": "Candy Crush"
+          },
+          "resposta_correcta": 1,
+          "punts": 3
+        },
+        {
+          "tipus": "multiple",
+          "enunciat": "Quin objecte és pràcticament obligatori per sobreviure la primera nit a Minecraft?",
+          "respostes": {
+            "resposta1": "Una espasa de diamants",
+            "resposta2": "Un llit",
+            "resposta3": "Una poció d'invisibilitat",
+            "resposta4": "Una armadura de netherite"
+          },
+          "resposta_correcta": 2,
+          "punts": 2
+        },
+        {
+          "tipus": "vf",
+          "enunciat": "El lag sempre és culpa del teu company, mai de la teva connexió.",
+          "respostes": {
+            "resposta1": "Verdader",
+            "resposta2": "Fals",
+            "resposta3": null,
+            "resposta4": null
+          },
+          "resposta_correcta": 1,
+          "punts": 1
+        },
+        {
+          "tipus": "multiple",
+          "enunciat": "Què acostuma a passar just quan dius 'anem molt bé'?",
+          "respostes": {
+            "resposta1": "Guanyeu fàcil",
+            "resposta2": "Crasha el joc",
+            "resposta3": "L'equip fa throw",
+            "resposta4": "Tens més FPS"
+          },
+          "resposta_correcta": 3,
+          "punts": 3
+        }
+      ]
+    },
+    {
+      "informacio": {
+        "titol": "Programador Supervivient",
+        "categoria": "Programació",
+        "dificultat": 3,
+        "descripcio": "Preguntes per saber si ets developer o només copies de Stack Overflow."
+      },
+      "preguntes": [
+        {
+          "tipus": "multiple",
+          "enunciat": "Quina és la funció més utilitzada per comprovar si el teu codi segueix viu?",
+          "respostes": {
+            "resposta1": "print()",
+            "resposta2": "explode()",
+            "resposta3": "panic()",
+            "resposta4": "sudo fix()"
+          },
+          "resposta_correcta": 1,
+          "punts": 2
+        },
+        {
+          "tipus": "vf",
+          "enunciat": "Si funciona al primer intent, probablement estàs somiant.",
+          "respostes": {
+            "resposta1": "Verdader",
+            "resposta2": "Fals",
+            "resposta3": null,
+            "resposta4": null
+          },
+          "resposta_correcta": 1,
+          "punts": 1
+        },
+        {
+          "tipus": "multiple",
+          "enunciat": "Què significa realment 'ho arreglo en 5 minuts'?",
+          "respostes": {
+            "resposta1": "5 minuts exactes",
+            "resposta2": "Una tarda sencera",
+            "resposta3": "Una setmana i tres tutorials de YouTube",
+            "resposta4": "Cal reinstal·lar Windows"
+          },
+          "resposta_correcta": 3,
+          "punts": 4
+        },
+        {
+          "tipus": "multiple",
+          "enunciat": "Quin és el ritual més habitual quan apareix un error estrany?",
+          "respostes": {
+            "resposta1": "Reiniciar l'ordinador",
+            "resposta2": "Preguntar-li a Claude",
+            "resposta3": "Posar un print()",
+            "resposta4": "Tot l'anterior"
+          },
+          "resposta_correcta": 4,
+          "punts": 2
+        },
+        {
+          "tipus": "vf",
+          "enunciat": "Si ChatGPT et retorna un codi de 200 línies, l'executaràs sense revisar-lo.",
+          "respostes": {
+            "resposta1": "Verdader",
+            "resposta2": "Fals",
+            "resposta3": null,
+            "resposta4": null
+          },
+          "resposta_correcta": 1,
+          "punts": 1
+        },
+        {
+          "tipus": "multiple",
+          "enunciat": "Quina frase és més perillosa?",
+          "respostes": {
+            "resposta1": "Només he tocat una línia",
+            "resposta2": "He seguit un tutorial",
+            "resposta3": "Claude diu que funciona",
+            "resposta4": "No cal fer proves"
+          },
+          "resposta_correcta": 3,
+          "punts": 3
+        },
+        {
+          "tipus": "multiple",
+          "enunciat": "Què significa realment 'copilot'?",
+          "respostes": {
+            "resposta1": "Un assistent de codi",
+            "resposta2": "Un company que escriu el codi per tu",
+            "resposta3": "Algú que també s'inventa les variables",
+            "resposta4": "Totes les anteriors"
+          },
+          "resposta_correcta": 4,
+          "punts": 2
+        }
+      ]
+    }
+  ]
+}

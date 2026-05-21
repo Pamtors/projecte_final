@@ -47,7 +47,7 @@ def main():
 
     # CARREGAR QUESTIONARIS
     questionaris_disponibles = carregar_questionaris_json(
-        "questionaris.json"
+        "data/questionaris_prova.json"
     )
 
     while True:
