@@ -2,7 +2,6 @@ from models.usuari import Usuari
 from datetime import date
 from models.questionari import carregar_questionaris_json
 from services.importacio_json import ImportadorJSON
-import sqlite3
 
 def crear_usuari(id_usuari):
 
