@@ -17,7 +17,6 @@ def crear_usuari(id_usuari):
     return usuari
 
 def main():
-    # Connexió utilitzant el teu mòdul de base de dades
     connexio = db.get_connection()
 
     proxim_id = 1
@@ -73,10 +72,8 @@ def main():
                             ruta = input("Nom del fitxer JSON: ")
                             importador = ImportadorJSON(connexio)
                             
-                            # L'importador retorna la llista de nous objectes Questionari
                             nous_questionaris = importador.importar_questionaris(ruta, usuari_actual.id_usuari)
-                            
-                            # Afegim els objectes un a un sense utilitzar .extend()
+
                             for questionari in nous_questionaris:
                                 questionaris_disponibles.append(questionari)
 

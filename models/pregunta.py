@@ -1,5 +1,5 @@
 class Pregunta:
-    def __init__(self, id_pregunta, id_questionari, tipus, enunciat, resposta_correcta, punts=1):
+    def __init__(self, id_pregunta, id_questionari, tipus, enunciat, resposta_correcta, punts):
         self.id_pregunta = id_pregunta
         self.id_questionari = id_questionari
         self.tipus = tipus
@@ -12,7 +12,6 @@ class Pregunta:
 
     def validar_resposta(self, opcio_usuari):
         raise NotImplementedError("Aquest mètode s'ha d'implementar a la subclasse")
-
 
 class PreguntaMultiple(Pregunta):
     def __init__(self, id_pregunta, id_questionari, enunciat, r1, r2, r3, r4, resposta_correcta, punts=1):
@@ -43,7 +42,6 @@ class PreguntaMultiple(Pregunta):
         except (ValueError, KeyError):
             print("Error: Has d'introduir un número d'opció vàlid.")
             return False
-
 
 class PreguntaVF(Pregunta):
     def __init__(self, id_pregunta, id_questionari, enunciat, resposta_correcta, punts=1):
