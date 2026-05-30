@@ -7,7 +7,7 @@ class Usuari:
         self.nom_usuari = nom_usuari
         self.contrassenya = contrassenya
         self.email = email
-        self.data_registre = date.today()
+        self.data_registre = date.today().strftime('%Y-%m-%d')
 
         self.num_partides = 0
         self.victories = 0
@@ -46,6 +46,6 @@ class Usuari:
             f"Victòries: {self.victories}\n"
             f"Derrotes: {self.derrotes}\n"
             f"Empats: {self.empats}\n"
-            f"Puntuació total: {self.puntuacio_total}\n"
-            f"Mitjana puntuació: {self.mitjana_puntuacio():.2f}\n"
+            f"Puntuació total: {self.puntuacio_total:.2f}\n"
+            f"Mitjana de puntuació: {self.mitjana_puntuacio():.2f}"
         )
