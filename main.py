@@ -1,114 +1,110 @@
-import database.database as db
-from services.autenticacio import iniciar_sessio, registrar_usuari
+from database.database import inicialitzar_base_dades
+from services.autenticacio import registrar_usuari, iniciar_sessio
 from services.importacio_json import ImportadorJSON
-from models.partida import Partida
-from models.resultat import Resultat
+from services.joc import mostrar_questionaris, jugar_individual, jugar_vs, carregar_questionari
+from services.estadistiques import mostrar_estadistiques_usuari, mostrar_ranking_global, mostrar_classificatoria
+
+
+def pausar():
+    input("\nPrem Enter per continuar...")
+
+
+def mostrar_info_questionari():
+    mostrar_questionaris()
+    try:
+        id_questionari = int(input("Número de qüestionari: "))
+    except ValueError:
+        print("Has d'escriure un número.")
+        return
+
+    questionari = carregar_questionari(id_questionari)
+    if questionari is None:
+        print("No s'ha trobat aquest qüestionari.")
+        return
+
+    print("\nInformació del qüestionari")
+    print(questionari)
+
+
+def menu_usuari(usuari):
+    while True:
+        print(f"\nMenú de {usuari.nom_usuari}")
+        print("1. Importar qüestionaris des d'un JSON")
+        print("2. Veure qüestionaris disponibles")
+        print("3. Mostrar informació d'un qüestionari")
+        print("4. Jugar partida individual")
+        print("5. Jugar partida 1 contra 1")
+        print("6. Veure les meves estadístiques")
+        print("7. Veure ranking global")
+        print("8. Veure classificatòria de resultats")
+        print("9. Tancar sessió")
+
+        opcio = input("Opció: ").strip()
+
+        if opcio == "1":
+            ruta = input("Ruta del JSON o Enter per usar data/quiz_test1.json: ").strip()
+            if ruta == "":
+                ruta = "data/quiz_test1.json"
+            importador = ImportadorJSON()
+            importador.importar_questionaris(ruta, usuari.id_usuari)
+            pausar()
+        elif opcio == "2":
+            mostrar_questionaris()
+            pausar()
+        elif opcio == "3":
+            mostrar_info_questionari()
+            pausar()
+        elif opcio == "4":
+            jugar_individual(usuari)
+            pausar()
+        elif opcio == "5":
+            jugar_vs(usuari)
+            pausar()
+        elif opcio == "6":
+            mostrar_estadistiques_usuari(usuari)
+            pausar()
+        elif opcio == "7":
+            mostrar_ranking_global()
+            pausar()
+        elif opcio == "8":
+            mostrar_classificatoria()
+            pausar()
+        elif opcio == "9":
+            print("Sessió tancada.")
+            break
+        else:
+            print("Opció no vàlida.")
+
 
 def main():
-    connexio = db.get_connection()
-    questionaris_disponibles = []
+    inicialitzar_base_dades()
 
     while True:
-        print("\n  Introdueix una opció   ")
-        print("1. Registre Usuari")
-        print("2. Iniciar Sessió")
-        print("3. Sortir")
+        print("\nQuizzBattle")
+        print("1. Registrar usuari")
+        print("2. Iniciar sessió")
+        print("3. Veure ranking global")
+        print("4. Sortir")
 
-        opcio = input("Opció: ")
+        opcio = input("Opció: ").strip()
 
-        match opcio:
-            case "1":
-                registrar_usuari()
+        if opcio == "1":
+            usuari = registrar_usuari()
+            if usuari is not None:
+                menu_usuari(usuari)
+        elif opcio == "2":
+            usuari = iniciar_sessio()
+            if usuari is not None:
+                menu_usuari(usuari)
+        elif opcio == "3":
+            mostrar_ranking_global()
+            pausar()
+        elif opcio == "4":
+            print("Fins aviat.")
+            break
+        else:
+            print("Opció no vàlida.")
 
-            case "2":
-                usuari_actual = iniciar_sessio()
-                if usuari_actual:
-                    while True:
-                        print(f"\n--- MENÚ USUARI ({usuari_actual.nom_usuari}) ---")
-                        print("a. Importar fitxer JSON amb qüestionaris")
-                        print("b. Veure qüestionaris disponibles")
-                        print("c. Jugar Partida Individual")
-                        print("d. Veure el meu perfil estadístic")
-                        print("e. Tancar sessió")
-
-                        opcio_usuari = input("Opció: ")
-
-                        match opcio_usuari:
-                            case "a":
-                                ruta = input("Introdueix la ruta del fitxer JSON: ")
-                                importador = ImportadorJSON(connexio)
-                                nous_questionaris = importador.importar_questionaris(ruta, usuari_actual.id_usuari)
-                                for questionari in nous_questionaris:
-                                    questionaris_disponibles.append(questionari)
-
-                            case "b":
-                                print("\n--- QUESTIONARIS ---")
-                                if len(questionaris_disponibles) == 0:
-                                    print("No hi ha qüestionaris disponibles en memòria. Importa'n un primer.")
-                                else:
-                                    for idx, q in enumerate(questionaris_disponibles):
-                                        print(f"{idx + 1}. {q.titol} ({q.categoria}) - Punts totals: {q.obtenir_punts_totals()}")
-
-                            case "c":
-                                if len(questionaris_disponibles) == 0:
-                                    print("No hi ha qüestionaris disponibles per jugar.")
-                                    continue
-                                
-                                for idx, q in enumerate(questionaris_disponibles):
-                                    print(f"{idx + 1}. {q.titol}")
-                                
-                                try:
-                                    sel = int(input("Selecciona el número de qüestionari: ")) - 1
-                                    q_escollit = questionaris_disponibles[sel]
-                                except (ValueError, IndexError):
-                                    print("Selecció incorrecta.")
-                                    continue
-
-                                partida = Partida(id_questionari=q_escollit.id_questionari, tipus="INDIVIDUAL")
-                                partida.guardar(connexio)
-
-                                punts_obtinguts = 0
-                                punts_totals = q_escollit.obtenir_punts_totals()
-
-                                for pregunta in q_escollit.preguntes:
-                                    pregunta.mostrar_pregunta()
-                                    resposta = input("La teva resposta (número d'opció): ")
-                                    if pregunta.validar_resposta(resposta):
-                                        punts_obtinguts += pregunta.punts
-
-                                nota_final = (punts_obtinguts / punts_totals) * 10 if punts_totals > 0 else 0.0
-                                print(f"\nPartida acabada! Punts: {punts_obtinguts}/{punts_totals}. Nota final: {nota_final:.2f}/10")
-
-                                estat_resultat = "WIN" if nota_final >= 5 else "LOSE"
-                                if estat_resultat == "WIN":
-                                    usuari_actual.afegir_victoria()
-                                else:
-                                    usuari_actual.afegir_derrota()
-                                
-                                usuari_actual.afegir_puntuacio(nota_final)
-
-                                resultat = Resultat(partida.id_partida, usuari_actual.id_usuari, nota_final, estat_resultat)
-                                resultat.guardar(connexio)
-
-                                db.db_actualitzar_estadistiques_usuari(connexio, usuari_actual)
-
-                            case "d":
-                                print("\n--- EL MEU PERFIL ---")
-                                print(usuari_actual)
-
-                            case "e":
-                                print("Tancant sessió...")
-                                break
-                            case _:
-                                print("Opció no vàlida")
-
-            case "3":
-                print("Sortint de l'aplicació...")
-                if connexio.is_connected():
-                    connexio.close()
-                break
-            case _:
-                print("Opció no vàlida")
 
 if __name__ == "__main__":
     main()
