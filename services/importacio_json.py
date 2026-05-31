@@ -1,128 +1,69 @@
 import json
+from database.database import get_connection
 from models.questionari import Questionari
 from models.pregunta import PreguntaMultiple, PreguntaVF
 
 class ImportadorJSON:
-    def __init__(self, connexio):
-        self.conn = connexio
-        self.cursor = self.conn.cursor()
-
     def importar_questionaris(self, ruta_json, id_usuari):
-        creats = 0
-        actualitzats = 0
-
         try:
             with open(ruta_json, "r", encoding="utf-8") as fitxer:
                 dades = json.load(fitxer)
         except FileNotFoundError:
-            print("Fitxer no trobat")
+            print("No s'ha trobat el fitxer.")
             return []
         except json.JSONDecodeError:
-            print("Error llegint el JSON")
+            print("El fitxer no té un format JSON correcte.")
             return []
 
+        if "questionaris" not in dades:
+            print("El JSON ha de tenir la clau questionaris.")
+            return []
+
+        connexio = get_connection()
         questionaris_carregats = []
-        questionaris = dades["questionaris"]
 
-        for q in questionaris:
-            info = q["informacio"]
-            titol = info["titol"]
-            categoria = info["categoria"]
-            dificultat = info["dificultat"]
-            descripcio = info["descripcio"]
+        for element in dades["questionaris"]:
+            info = element.get("informacio", {})
+            titol = info.get("titol", "Sense títol")
+            categoria = info.get("categoria", "General")
+            dificultat = int(info.get("dificultat", 1))
+            descripcio = info.get("descripcio", "")
 
-            print("\n======================")
-            print(f"TÍTOL: {titol}")
-            print(f"CATEGORIA: {categoria}")
-            print(f"DIFICULTAT: {dificultat}")
-            print(f"PREGUNTES: {len(q['preguntes'])}")
-            print("======================")
+            cursor = connexio.cursor()
+            cursor.execute(
+                "INSERT INTO questionaris (id_propietari, titol, categoria, dificultat, descripcio) VALUES (%s, %s, %s, %s, %s)",
+                (id_usuari, titol, categoria, dificultat, descripcio)
+            )
+            id_questionari = cursor.lastrowid
+            questionari = Questionari(id_questionari, id_usuari, titol, categoria, dificultat, descripcio)
 
-            self.cursor.execute("""
-                SELECT id_questionari
-                FROM questionaris
-                WHERE titol = ? AND id_propietari = ?
-            """, (titol, id_usuari))
+            for pregunta_json in element.get("preguntes", []):
+                tipus = str(pregunta_json.get("tipus", "multiple")).lower()
+                enunciat = pregunta_json.get("enunciat", "")
+                respostes = pregunta_json.get("respostes", {})
+                resposta1 = respostes.get("resposta1")
+                resposta2 = respostes.get("resposta2")
+                resposta3 = respostes.get("resposta3")
+                resposta4 = respostes.get("resposta4")
+                resposta_correcta = int(pregunta_json.get("resposta_correcta", 1))
+                punts = int(pregunta_json.get("punts", 1))
 
-            existent = self.cursor.fetchone()
-
-            if existent:
-                opcio = input(
-                    "Aquest qüestionari ja existeix.\n"
-                    "1. Actualitzar\n"
-                    "2. Guardar amb nou títol\n"
-                    "Opció: "
-                )
-
-                if opcio == "1":
-                    id_questionari = existent[0]
-                    self.cursor.execute("""
-                        DELETE FROM preguntes
-                        WHERE id_questionari = ?
-                    """, (id_questionari,))
-
-                    self.cursor.execute("""
-                        UPDATE questionaris
-                        SET categoria = ?,
-                            dificultat = ?,
-                            descripcio = ?
-                        WHERE id_questionari = ?
-                    """, (categoria, dificultat, descripcio, id_questionari))
-                    actualitzats += 1
-                else:
-                    titol = input("Nou títol: ")
-                    self.cursor.execute("""
-                        INSERT INTO questionaris
-                        (id_propietari, titol, categoria, dificultat, descripcio)
-                        VALUES (?, ?, ?, ?, ?)
-                    """, (id_usuari, titol, categoria, dificultat, descripcio))
-                    id_questionari = self.cursor.lastrowid
-                    creats += 1
-            else:
-                self.cursor.execute("""
-                    INSERT INTO questionaris
-                    (id_propietari, titol, categoria, dificultat, descripcio)
-                    VALUES (?, ?, ?, ?, ?)
-                """, (id_usuari, titol, categoria, dificultat, descripcio))
-                id_questionari = self.cursor.lastrowid
-                creats += 1
-
-            obj_questionari = Questionari(id_questionari, id_usuari, titol, categoria, dificultat, descripcio)
-
-            for p in q["preguntes"]:
-                self.cursor.execute("""
-                    INSERT INTO preguntes
+                cursor.execute(
+                    "INSERT INTO preguntes (id_questionari, tipus, enunciat, resposta1, resposta2, resposta3, resposta4, resposta_correcta, punts) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
                     (id_questionari, tipus, enunciat, resposta1, resposta2, resposta3, resposta4, resposta_correcta, punts)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (
-                    id_questionari,
-                    p["tipus"],
-                    p["enunciat"],
-                    p["respostes"]["resposta1"],
-                    p["respostes"]["resposta2"],
-                    p["respostes"]["resposta3"],
-                    p["respostes"]["resposta4"],
-                    p["resposta_correcta"],
-                    p["punts"]
-                ))
-                id_pregunta = self.cursor.lastrowid
+                )
+                id_pregunta = cursor.lastrowid
 
-                if p["tipus"] == "VF":
-                    obj_pregunta = PreguntaVF(id_pregunta, id_questionari, p["enunciat"], p["resposta_correcta"], p["punts"])
+                if tipus == "vf":
+                    pregunta = PreguntaVF(id_pregunta, id_questionari, enunciat, resposta_correcta, punts)
                 else:
-                    obj_pregunta = PreguntaMultiple(
-                        id_pregunta, id_questionari, p["enunciat"],
-                        p["respostes"]["resposta1"], p["respostes"]["resposta2"],
-                        p["respostes"]["resposta3"], p["respostes"]["resposta4"],
-                        p["resposta_correcta"], p["punts"]
-                    )
-                obj_questionari.afegir_pregunta(obj_pregunta)
+                    pregunta = PreguntaMultiple(id_pregunta, id_questionari, enunciat, resposta1, resposta2, resposta3, resposta4, resposta_correcta, punts)
 
-            questionaris_carregats.append(obj_questionari)
+                questionari.afegir_pregunta(pregunta)
 
-        self.conn.commit()
-        print("\nIMPORTACIÓ FINALITZADA")
-        print(f"Qüestionaris creats: {creats}")
-        print(f"Qüestionaris actualitzats: {actualitzats}")
-        
+            questionaris_carregats.append(questionari)
+
+        connexio.commit()
+        connexio.close()
+        print(f"S'han importat {len(questionaris_carregats)} qüestionaris.")
         return questionaris_carregats
