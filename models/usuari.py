@@ -1,19 +1,20 @@
 from datetime import date
 
 class Usuari:
-    def __init__(self, id_usuari, nom, nom_usuari, contrassenya, email):
+    def __init__(self, id_usuari, nom, nom_usuari, contrassenya, email, data_registre=None, num_partides=0, victories=0, derrotes=0, empats=0, puntuacio_total=0.0):
         self.id_usuari = id_usuari
         self.nom = nom
         self.nom_usuari = nom_usuari
         self.contrassenya = contrassenya
         self.email = email
-        self.data_registre = date.today().strftime('%Y-%m-%d')
+        
+        self.data_registre = data_registre if data_registre else date.today().strftime('%Y-%m-%d')
 
-        self.num_partides = 0
-        self.victories = 0
-        self.derrotes = 0
-        self.empats = 0
-        self.puntuacio_total = 0.0
+        self.num_partides = num_partides
+        self.victories = victories
+        self.derrotes = derrotes
+        self.empats = empats
+        self.puntuacio_total = float(puntuacio_total) # Nos aseguramos de que sea float
 
     def afegir_victoria(self):
         self.num_partides += 1

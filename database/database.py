@@ -6,14 +6,13 @@ def get_connection():
         port=3307,
         user="root",
         password="",
-        database="sistema_cuestionarios"
+        database="sistema_cuestionarios" 
     )
     return conn
 
 
 def inicialitzar_base_dades():
     try:
-        # Conexión al servidor MySQL
         conn = mysql.connector.connect(
             host="127.0.0.1",
             port=3307,
@@ -22,7 +21,8 @@ def inicialitzar_base_dades():
         )
 
         cursor = conn.cursor()
-        cursor.execute("CREATE DATABASE IF NOT EXISTS quizzbattle")
+
+        cursor.execute("CREATE DATABASE IF NOT EXISTS sistema_cuestionarios")
         conn.close()
 
         conn = get_connection()
