@@ -6,7 +6,7 @@ def get_connection():
         port=3307,
         user="root",
         password="",
-        database="sistema_cuestionarios" 
+        database="sistema_cuestionaris" 
     )
     return conn
 
@@ -22,7 +22,7 @@ def inicialitzar_base_dades():
 
         cursor = conn.cursor()
 
-        cursor.execute("CREATE DATABASE IF NOT EXISTS sistema_cuestionarios")
+        cursor.execute("CREATE DATABASE IF NOT EXISTS sistema_cuestionaris")
         conn.close()
 
         conn = get_connection()

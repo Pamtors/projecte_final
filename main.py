@@ -4,10 +4,8 @@ from services.importacio_json import ImportadorJSON
 from services.joc import mostrar_questionaris, jugar_individual, jugar_vs, carregar_questionari
 from services.estadistiques import mostrar_estadistiques_usuari, mostrar_ranking_global, mostrar_classificatoria
 
-
 def pausar():
     input("\nPrem Enter per continuar...")
-
 
 def mostrar_info_questionari():
     mostrar_questionaris()
@@ -42,9 +40,9 @@ def menu_usuari(usuari):
         opcio = input("Opció: ").strip()
 
         if opcio == "1":
-            ruta = input("Ruta del JSON o Enter per usar data/quiz_test1.json: ").strip()
+            ruta = input("Ruta del JSON o Enter per usar data/questionaris_prova.json: ").strip()
             if ruta == "":
-                ruta = "data/quiz_test1.json"
+                ruta = "data/questionaris_prova.json"
             importador = ImportadorJSON()
             importador.importar_questionaris(ruta, usuari.id_usuari)
             pausar()
@@ -74,7 +72,6 @@ def menu_usuari(usuari):
             break
         else:
             print("Opció no vàlida.")
-
 
 def main():
     inicialitzar_base_dades()
